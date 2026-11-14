@@ -1,0 +1,58 @@
+# Environment
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+# Python build / env dirs
+/lib/
+/lib64/
+!apps/web/src/lib/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual Environment
+.venv/
+env/
+venv/
+ENV/
+
+# Database
+*.sqlite
+*.sqlite3
+*.db
+
+# Pytest / Cache
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Media & Videos
+*.mp4
+*.mov
+
+apps/web/node_modules/
+apps/web/.next/
+apps/web/out/
+apps/web/build/
+.pnpm-store/
+node_modules/
+
+# OS
+.DS_Store
+Thumbs.db
+

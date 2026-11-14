@@ -1,0 +1,57 @@
+# PENELOPE: Flash-Flood Prediction & Early-Warning Platform
+# Tagline: "Data today. Safer tomorrows."
+# Pillars: Predict · Prepare · Protect
+
+.PHONY: help dev build up down restart logs test lint migrate seed ingest clean
+
+help:
+	@echo "Available commands:"
+	@echo "  make dev       - Run the full stack with Docker Compose"
+	@echo "  make build     - Build all Docker containers"
+	@echo "  make up        - Start containers in detached mode"
+	@echo "  make down      - Stop and remove containers"
+	@echo "  make logs      - View logs from all containers"
+	@echo "  make test      - Run backend, frontend, and ML tests"
+	@echo "  make migrate   - Run Alembic database migrations"
+	@echo "  make seed      - Ingest real external data and seed 3 regions"
+	@echo "  make ingest    - Run Part 2 terrain, weather, river, and sensor pipeline"
+	@echo "  make lint      - Lint code across backend and frontend"
+	@echo "  make clean     - Remove cache and temporary artifacts"
+
+dev:
+	docker compose up --build
+
+build:
+	docker compose build
+
+up:
+	docker compose up -d
+
+down:
+	docker compose down
+
+restart:
+	docker compose restart
+
+logs:
+	docker compose logs -f
+
+migrate:
+	alembic upgrade head || python -c "from apps.api.database import init_db; init_db()"
+
+seed:
+	python -m apps.api.seed
+
+ingest:
+	python -m apps.api.ingestion.run_ingest
+
+test:
+	python -m pytest apps/api/tests ml/tests -v
+
+lint:
+	python -m flake8 apps/api ml --max-line-length=120 --ignore=E203,W503 || true
+	cd apps/web && pnpm lint
+
+clean:
+	find . -type d -name "__pycache__" -exec rm -rf {} +
+	find . -type f -name "*.pyc" -delete
